@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superstar Test Lektion 1 - September</title>
+    <style>
+        :root {
+            --primary-color: #0284c7;
+            --secondary-color: #0369a1;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            direction: ltr;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 30px auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        #login-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        #login-screen h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+
+        #login-screen p {
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 80%;
+            max-width: 400px;
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        #exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #timer {
+            font-weight: bold;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 6px;
+        }
+
+        .section-card {
+            background: #f1f5f9;
+            border-left: 5px solid var(--primary-color);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-top: 0;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .reading-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1.05rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-item {
+            margin-bottom: 25px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-item p {
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 6px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .options label:hover {
+            background: #e0f2fe;
+        }
+
+        .text-answer-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-top: 8px;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-center {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        #result-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .score-badge {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin: 20px 0;
+            background: #e0f2fe;
+            display: inline-block;
+            padding: 15px 40px;
+            border-radius: 50px;
+        }
+
+        .feedback-item {
+            text-align: left;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .feedback-item.correct {
+            border-left: 5px solid var(--success);
+        }
+
+        .feedback-item.incorrect {
+            border-left: 5px solid var(--danger);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .whatsapp-btn {
+            background: #25d366;
+            margin-top: 20px;
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .whatsapp-btn:hover {
+            background: #1ebd58;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="login-screen">
+            <h1>Superstar Test – Lektion 1</h1>
+            <p>Monatsprüfung September (1. Prep) — Bitte geben Sie Ihren Namen ein:</p>
+            <div class="input-group">
+                <input type="text" id="student-name" placeholder="Vollständiger Name des Schülers..." required>
+            </div>
+            <button class="btn" onclick="startExam()">Prüfung starten</button>
+        </div>
+
+        <!-- Exam Form -->
+        <div id="exam-screen" class="hidden">
+            <div id="exam-header">
+                <div>Schüler: <span id="display-name" style="font-weight: bold;"></span></div>
+                <div id="timer">Zeit: 30:00</div>
+            </div>
+
+            <form id="exam-form" onsubmit="submitExam(event)">
+                
+                <!-- I. TEXTERFASSUNG -->
+                <div class="section-card">
+                    <h2 class="section-title">I. Texterfassung [12 Punkte] (6x2)</h2>
+                    <div class="reading-box">
+                        <strong>Lies den Text!</strong><br><br>
+                        Mein Name ist Marko. Ich komme aus Frankreich, aus Paris. Aber ich wohne jetzt in Berlin. Ich bin neu hier und lerne Deutsch. Ich spreche aber sehr gut Französisch und Englisch. Gern spiele ich Tennis und manchmal Fußball.
+                    </div>
+
+                    <div class="question-item">
+                        <p>1. Woher kommt Marko?</p>
+                        <div class="options">
+                            <label><input type="radio" name="q1" value="a"> a) Aus Berlin</label>
+                            <label><input type="radio" name="q1" value="b"> b) Aus Frankreich</label>
+                            <label><input type="radio" name="q1" value="c"> c) Aus London</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>2. Wo wohnt Marko?</p>
+                        <div class="options">
+                            <label><input type="radio" name="q2" value="a"> a) In Paris</label>
+                            <label><input type="radio" name="q2" value="b"> b) In Berlin</label>
+                            <label><input type="radio" name="q2" value="c"> c) In Rom</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>3. Spricht Marko gut Englisch?</p>
+                        <div class="options">
+                            <label><input type="radio" name="q3" value="a"> a) Ja, sehr gut</label>
+                            <label><input type="radio" name="q3" value="b"> b) Nein</label>
+                            <label><input type="radio" name="q3" value="c"> c) Nur Deutsch</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>4. Was spielt Marko?</p>
+                        <div class="options">
+                            <label><input type="radio" name="q4" value="a"> a) Nur Fußball</label>
+                            <label><input type="radio" name="q4" value="b"> b) Tennis und manchmal Fußball</label>
+                            <label><input type="radio" name="q4" value="c"> c) Basketball</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>5. Wo ist Paris?</p>
+                        <div class="options">
+                            <label><input type="radio" name="q5" value="a"> a) In Frankreich</label>
+                            <label><input type="radio" name="q5" value="b"> b) In Ägypten</label>
+                            <label><input type="radio" name="q5" value="c"> c) In Berlin</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>6. Was lernt Marko in Berlin?</p>
+                        <div class="options">
+                            <label><input type="radio" name="q6" value="a"> a) Englisch</label>
+                            <label><input type="radio" name="q6" value="b"> b) Französisch</label>
+                            <label><input type="radio" name="q6" value="c"> c) Deutsch</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- II. GRAMMATIK -->
+                <div class="section-card">
+                    <h2 class="section-title">II. Grammatik [7 Punkte] (7x1)</h2>
+                    <p style="font-weight:bold; margin-bottom:15px;">Wähle die richtige Antwort aus.</p>
+
+                    <div class="question-item">
+                        <p>1. Ich ...................... Kamal.</p>
+                        <div class="options">
+                            <label><input type="radio" name="g1" value="bist"> a) bist</label>
+                            <label><input type="radio" name="g1" value="ist"> b) ist</label>
+                            <label><input type="radio" name="g1" value="bin"> c) bin</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>2. ...................... wohnst du? – In Gisa.</p>
+                        <div class="options">
+                            <label><input type="radio" name="g2" value="Wer"> a) Wer</label>
+                            <label><input type="radio" name="g2" value="Wo"> b) Wo</label>
+                            <label><input type="radio" name="g2" value="Woher"> c) Woher</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>3. ...................... du aus London? – Nein, aus Tokio.</p>
+                        <div class="options">
+                            <label><input type="radio" name="g3" value="Kommst"> a) Kommst</label>
+                            <label><input type="radio" name="g3" value="Wohnst"> b) Wohnst</label>
+                            <label><input type="radio" name="g3" value="Lernst"> c) Lernst</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>4. Hi, ich komme aus Deutschland. Und du? – ......................, aus Italien.</p>
+                        <div class="options">
+                            <label><input type="radio" name="g4" value="Ja, auch"> a) Ja, auch</label>
+                            <label><input type="radio" name="g4" value="Nein, auch"> b) Nein, auch</label>
+                            <label><input type="radio" name="g4" value="Nein"> c) Nein</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>5. ...................... du in Oktober-City? – Ja.</p>
+                        <div class="options">
+                            <label><input type="radio" name="g5" value="Spielst"> a) Spielst</label>
+                            <label><input type="radio" name="g5" value="Kommst"> b) Kommst</label>
+                            <label><input type="radio" name="g5" value="Wohnst"> c) Wohnst</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>6. Ich bin neu hier. Und ......................? – Ich bin auch neu hier.</p>
+                        <div class="options">
+                            <label><input type="radio" name="g6" value="du"> a) du</label>
+                            <label><input type="radio" name="g6" value="ich"> b) ich</label>
+                            <label><input type="radio" name="g6" value="Amal"> c) Amal</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>7. Spielst du Fußball? – ......................, ich spiele gern Volleyball.</p>
+                        <div class="options">
+                            <label><input type="radio" name="g7" value="Ja"> a) Ja</label>
+                            <label><input type="radio" name="g7" value="Nein"> b) Nein</label>
+                            <label><input type="radio" name="g7" value="Stimmt"> c) Stimmt</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- III. ALLTAGSSITUATIONEN -->
+                <div class="section-card">
+                    <h2 class="section-title">III. Alltagssituationen [2 Punkte] (2x1)</h2>
+                    <p style="font-weight:bold; margin-bottom:15px;">Wähle die richtige Antwort aus.</p>
+
+                    <div class="question-item">
+                        <p>1. Mona fragt: "Wo liegt Alexandria?"</p>
+                        <div class="options">
+                            <label><input type="radio" name="s1" value="a"> a) In Deutschland.</label>
+                            <label><input type="radio" name="s1" value="b"> b) In Kairo.</label>
+                            <label><input type="radio" name="s1" value="c"> c) In Ägypten.</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>2. Spielst du auch Volleyball?</p>
+                        <div class="options">
+                            <label><input type="radio" name="s2" value="a"> a) Nein, ich bin Sara.</label>
+                            <label><input type="radio" name="s2" value="b"> b) Ja, sehr gut Tennis.</label>
+                            <label><input type="radio" name="s2" value="c"> c) Ja, ich bin Vollyballspieler.</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IV. WAS PASST HIER NICHT? -->
+                <div class="section-card">
+                    <h2 class="section-title">IV. Was passt hier nicht? [6 Punkte] (3x2)</h2>
+                    
+                    <div class="question-item">
+                        <p>1. Tschüss – Grüß Gott – Willkommen – Hallo</p>
+                        <div class="options">
+                            <label><input type="radio" name="w1" value="Tschüss"> a) Tschüss</label>
+                            <label><input type="radio" name="w1" value="Grüß Gott"> b) Grüß Gott</label>
+                            <label><input type="radio" name="w1" value="Willkommen"> c) Willkommen</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>2. bist – heißt – spielt – komme</p>
+                        <div class="options">
+                            <label><input type="radio" name="w2" value="bist"> a) bist</label>
+                            <label><input type="radio" name="w2" value="spielt"> b) spielt</label>
+                            <label><input type="radio" name="w2" value="komme"> c) komme</label>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <p>3. Name – Gitarre – Tennis – Handball</p>
+                        <div class="options">
+                            <label><input type="radio" name="w3" value="Name"> a) Name</label>
+                            <label><input type="radio" name="w3" value="Gitarre"> b) Gitarre</label>
+                            <label><input type="radio" name="w3" value="Tennis"> c) Tennis</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- V. DIALOGERGÄNZUNG -->
+                <div class="section-card">
+                    <h2 class="section-title">V. Ergänze den Dialog! [3 Punkte] (3x1)</h2>
+                    
+                    <div class="reading-box" style="background: white; font-family: monospace;">
+                        <strong>A:</strong> Hallo! Ich bin Max.<br>
+                        <strong>B:</strong> Hallo! Ich bin Messi.<br>
+                        <strong>A:</strong> <input type="text" class="text-answer-input" name="d1" placeholder="Schreibe hier..." style="width: 250px; display:inline-block;">?<br>
+                        <strong>B:</strong> Ja, ich bin neu hier.<br>
+                        <strong>A:</strong> <input type="text" class="text-answer-input" name="d2" placeholder="Schreibe hier..." style="width: 250px; display:inline-block;">?<br>
+                        <strong>B:</strong> Aus Argentinien.<br>
+                        <strong>A:</strong> <input type="text" class="text-answer-input" name="d3" placeholder="Schreibe hier..." style="width: 250px; display:inline-block;">?<br>
+                        <strong>B:</strong> Nein, ich spreche gut Englisch.
+                    </div>
+                </div>
+
+                <div class="btn-center">
+                    <button type="submit" class="btn">Prüfung abgeben</button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen">
+            <h2>Ergebnis des Tests (Superstar Lektion 1)</h2>
+            <div class="score-badge" id="final-score-display">0 / 30</div>
+            <p id="student-result-name" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 20px;"></p>
+            
+            <div id="feedback-container" style="text-align: left; margin-top: 30px;">
+                <!-- Feedback items populated via JS -->
+            </div>
+
+            <div class="btn-center">
+                <a id="whatsapp-link" href="#" target="_blank" class="whatsapp-btn">Ergebnis per WhatsApp senden</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeLeft = 30 * 60; 
+        let studentName = "";
+
+        const correctAnswers = {
+            q1: "b", // Aus Frankreich
+            q2: "b", // In Berlin
+            q3: "a", // Ja, sehr gut
+            q4: "b", // Tennis und manchmal Fußball
+            q5: "a", // In Frankreich
+            q6: "c", // Deutsch
+
+            g1: "bin",
+            g2: "Wo",
+            g3: "Kommst",
+            g4: "Nein, auch",
+            g5: "Wohnst",
+            g6: "du",
+            g7: "Nein",
+
+            s1: "c", // In Ägypten
+            s2: "c", // Ja, ich bin Vollyballspieler.
+
+            w1: "Tschüss",
+            w2: "komme",
+            w3: "Name",
+
+            d1: "bist du neu hier",
+            d2: "woher kommst du",
+            d3: "sprichst du deutsch"
+        };
+
+        function startExam() {
+            const nameInput = document.getElementById("student-name").value.trim();
+            if(!nameInput) {
+                alert("Bitte geben Sie Ihren Namen ein!");
+                return;
+            }
+            studentName = nameInput;
+            document.getElementById("display-name").textContent = studentName;
+            
+            document.getElementById("login-screen").classList.add("hidden");
+            document.getElementById("exam-screen").classList.remove("hidden");
+
+            startTimer();
+        }
+
+        function startTimer() {
+            const timerDisplay = document.getElementById("timer");
+            timerInterval = setInterval(() => {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                
+                timerDisplay.textContent = "Zeit: " + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Die Zeit ist abgelaufen! Die Prüfung wird automatisch abgegeben.");
+                    submitExam(new Event('submit'));
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        function normalizeText(text) {
+            if (!text) return "";
+            return text.trim().toLowerCase().replace(".", "").replace(",", "").replace("?", "").replace("!", "").replace(/\s+/g, " ");
+        }
+
+        function submitExam(event) {
+            if(event) event.preventDefault();
+            clearInterval(timerInterval);
+
+            let score = 0;
+            let feedbackHTML = "";
+
+            // I. Texterfassung (6 x 2 = 12)
+            for(let i=1; i<=6; i++) {
+                let qName = "q" + i;
+                let selected = document.querySelector('input[name="' + qName + '"]:checked');
+                let userVal = selected ? selected.value : "";
+                let isCorrect = (userVal === correctAnswers[qName]);
+                if(isCorrect) score += 2;
+
+                feedbackHTML += '<div class="feedback-item ' + (isCorrect ? 'correct' : 'incorrect') + '">' +
+                    '<strong>Texterfassung Fr. ' + i + ':</strong> ' + (isCorrect ? 'Richtig (+2 P.)' : 'Falsch (Ihre Antwort: ' + (userVal || 'Keine') + ', Richtige Antwort: ' + correctAnswers[qName] + ')') +
+                '</div>';
+            }
+
+            // II. Grammatik (7 x 1 = 7)
+            for(let i=1; i<=7; i++) {
+                let gName = "g" + i;
+                let selected = document.querySelector('input[name="' + gName + '"]:checked');
+                let userVal = selected ? selected.value : "";
+                let isCorrect = (userVal === correctAnswers[gName]);
+                if(isCorrect) score += 1;
+
+                feedbackHTML += '<div class="feedback-item ' + (isCorrect ? 'correct' : 'incorrect') + '">' +
+                    '<strong>Grammatik Fr. ' + i + ':</strong> ' + (isCorrect ? 'Richtig (+1 P.)' : 'Falsch (Ihre Antwort: ' + (userVal || 'Keine') + ', Richtige Antwort: ' + correctAnswers[gName] + ')') +
+                '</div>';
+            }
+
+            // III. Alltagssituationen (2 x 1 = 2)
+            for(let i=1; i<=2; i++) {
+                let sName = "s" + i;
+                let selected = document.querySelector('input[name="' + sName + '"]:checked');
+                let userVal = selected ? selected.value : "";
+                let isCorrect = (userVal === correctAnswers[sName]);
+                if(isCorrect) score += 1;
+
+                feedbackHTML += '<div class="feedback-item ' + (isCorrect ? 'correct' : 'incorrect') + '">' +
+                    '<strong>Alltagssituationen Fr. ' + i + ':</strong> ' + (isCorrect ? 'Richtig (+1 P.)' : 'Falsch (Ihre Antwort: ' + (userVal || 'Keine') + ', Richtige Antwort: ' + correctAnswers[sName] + ')') +
+                '</div>';
+            }
+
+            // IV. Was passt hier nicht? (3 x 2 = 6)
+            for(let i=1; i<=3; i++) {
+                let wName = "w" + i;
+                let selected = document.querySelector('input[name="' + wName + '"]:checked');
+                let userVal = selected ? selected.value : "";
+                let isCorrect = (userVal === correctAnswers[wName]);
+                if(isCorrect) score += 2;
+
+                feedbackHTML += '<div class="feedback-item ' + (isCorrect ? 'correct' : 'incorrect') + '">' +
+                    '<strong>Was passt hier nicht? Fr. ' + i + ':</strong> ' + (isCorrect ? 'Richtig (+2 P.)' : 'Falsch (Ihre Antwort: ' + (userVal || 'Keine') + ', Richtige Antwort: ' + correctAnswers[wName] + ')') +
+                '</div>';
+            }
+
+            // V. Dialog (3 x 1 = 3)
+            for(let i=1; i<=3; i++) {
+                let dName = "d" + i;
+                let userVal = document.querySelector('input[name="' + dName + '"]').value;
+                let normUser = normalizeText(userVal);
+                let isCorrect = normUser.includes(correctAnswers[dName].split(" ")[0]) || (normUser.length > 3 && normUser === normalizeText(correctAnswers[dName]));
+                if(isCorrect) score += 1;
+
+                feedbackHTML += '<div class="feedback-item ' + (isCorrect ? 'correct' : 'incorrect') + '">' +
+                    '<strong>Dialog Pkt. ' + i + ':</strong> ' + (isCorrect ? 'Richtig (+1 P.)' : 'Falsch/Unvollständig (Ihre Antwort: "' + userVal + '", Vorschlag: "' + correctAnswers[dName] + '")') +
+                '</div>';
+            }
+
+            document.getElementById("exam-screen").classList.add("hidden");
+            document.getElementById("result-screen").style.display = "block";
+            document.getElementById("final-score-display").textContent = score + " / 30";
+            document.getElementById("student-result-name").textContent = "Schüler: " + studentName;
+            document.getElementById("feedback-container").innerHTML = feedbackHTML;
+
+            // تم ربطه برقم هاتفك مباشرة
+            let waNumber = "201091115165"; 
+            let waMessage = "Superstar Test (Lektion 1):\nName: " + studentName + "\nPunkte: " + score + " von 30";
+            document.getElementById("whatsapp-link").href = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(waMessage);
+        }
+    </script>
+</body>
+</html>
